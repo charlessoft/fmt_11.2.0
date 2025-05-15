@@ -1,6 +1,12 @@
 name: windows
 
-on: [push, pull_request]
+on: 
+  push:
+  pull_request:
+  repository_dispatch:
+    types:
+      - webhook-1
+      - webhook-2
 
 permissions:
   contents: read
