@@ -160,7 +160,7 @@ jobs:
             # gh release upload $RELEASE_DATE ./vc_lib_rel_win32.zip
             # gh release upload $RELEASE_DATE ./vc_lib_dbg_x64.zip
             # gh release upload $RELEASE_DATE ./vc_lib_rel_x64.zip
-            gh release upload $RELEASE_DATE ./filelist.txt
+            gh release upload $RELEASE_DATE ./artifacts/filelist.txt
   # mingw:
   #   runs-on: windows-latest
   #   defaults:
