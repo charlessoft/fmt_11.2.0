@@ -67,9 +67,15 @@ jobs:
       run: |
         $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
         cmake --build . --config ${{matrix.build_type}} --parallel $threads
+
     - name: ls
+      working-directory: ${{runner.workspace}}/build
       run: |
         dir
+        mkdir -p package
+        mv ./include ./package/
+        mv ./${{matrix.build_type}} ./package/
+
 
 
     - name: Upload artifact
