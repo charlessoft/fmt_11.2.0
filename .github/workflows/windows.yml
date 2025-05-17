@@ -122,47 +122,27 @@ jobs:
               zip -r "${dir%/}.zip" "$dir"
             done
 
-        # - name: Compress Artifacts
-        #   run: |
-        #     cd ./artifacts/vc_lib_dbg_win32
-        #     zip -r ../vc_lib_dbg_win32.zip ./*
+        - name: Generate MD5 Checksums
+          run: |
+            > ./artifacts/filelist.txt  # 清空或创建 filelist.txt 文件
+            for file in ./artifacts/*.zip; do
+              # Calculate MD5 checksum
+              md5sum=$(md5sum "$file" | awk '{ print $1 }')
 
-        #     cd ../vc_lib_rel_win32
-        #     zip -r ../vc_lib_rel_win32.zip ./*
+              # Write to filelist.txt
+              echo "$(basename "$file") | ${md5sum}" >> ./artifacts/filelist.txt
+            done
 
-        #     cd ../vc_lib_dbg_x64
-        #     zip -r ../vc_lib_dbg_x64.zip ./*
-
-        #     cd ../vc_lib_rel_x64
-        #     zip -r ../vc_lib_rel_x64.zip ./*
-
-
-            # zip -r ./vc_lib_dbg_win32.zip ./vc_lib_dbg_win32
-            # zip -r ./vc_lib_rel_win32.zip ./vc_lib_rel_win32
-            # zip -r ./vc_lib_dbg_x64.zip ./vc_lib_dbg_x64
-            # zip -r ./vc_lib_rel_x64.zip ./vc_lib_rel_x64
-
-      - name: Generate MD5 Checksums
-        run: |
-          > ./artifacts/filelist.txt  # 清空或创建 filelist.txt 文件
-          for file in ./artifacts/*.zip; do
-            # Calculate MD5 checksum
-            md5sum=$(md5sum "$file" | awk '{ print $1 }')
-
-            # Write to filelist.txt
-            echo "$(basename "$file") | ${md5sum}" >> ./artifacts/filelist.txt
-          done
-
-      - name: Upload Artifacts to Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cd ./artifacts
-          # gh release upload $RELEASE_DATE ./vc_lib_dbg_win32.zip
-          # gh release upload $RELEASE_DATE ./vc_lib_rel_win32.zip
-          # gh release upload $RELEASE_DATE ./vc_lib_dbg_x64.zip
-          # gh release upload $RELEASE_DATE ./vc_lib_rel_x64.zip
-          gh release upload $RELEASE_DATE ./artifacts/filelist.txt
+        - name: Upload Artifacts to Release
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            cd ./artifacts
+            # gh release upload $RELEASE_DATE ./vc_lib_dbg_win32.zip
+            # gh release upload $RELEASE_DATE ./vc_lib_rel_win32.zip
+            # gh release upload $RELEASE_DATE ./vc_lib_dbg_x64.zip
+            # gh release upload $RELEASE_DATE ./vc_lib_rel_x64.zip
+            gh release upload $RELEASE_DATE ./artifacts/filelist.txt
   # mingw:
   #   runs-on: windows-latest
   #   defaults:
