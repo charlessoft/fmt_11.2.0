@@ -67,6 +67,10 @@ jobs:
       run: |
         $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
         cmake --build . --config ${{matrix.build_type}} --parallel $threads
+    - name: ls
+      run: |
+        ls build
+        
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
