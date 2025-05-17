@@ -73,7 +73,8 @@ jobs:
       run: |
         dir
         mkdir -p package
-        mv ./include ./package/
+#        mv ./include ./package/
+        mv ../${{runner.workspace}}/include ./package
         mv ./${{matrix.build_type}} ./package/
 
 
